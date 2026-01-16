@@ -3,293 +3,166 @@
   <head>
     <meta charset="utf-8" />
     <title>Kova – Reset Password</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-      :root {
-        --bg: #050608;
-        --panel: #101318;
-        --border: rgba(255, 255, 255, 0.08);
-        --accent: #6cff99;
-        --text: #f5f7fa;
-        --muted: #9aa3b2;
-        --danger: #ff6b6b;
-      }
-
       body {
-        margin: 0;
-        min-height: 100vh;
+        background: #111;
+        color: #eee;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: radial-gradient(circle at top, #111827, #020308 60%);
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-          sans-serif;
-        color: var(--text);
+        min-height: 100vh;
+        margin: 0;
       }
-
       .card {
+        background: #1f1f1f;
+        border-radius: 12px;
+        padding: 20px;
         width: 100%;
-        max-width: 420px;
-        background: var(--panel);
-        border-radius: 18px;
-        border: 1px solid var(--border);
-        padding: 24px 22px 20px;
-        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
-      }
-
-      .brand {
-        font-size: 18px;
-        font-weight: 800;
-        letter-spacing: 0.16em;
-        color: var(--accent);
-        text-align: center;
-        margin-bottom: 4px;
-        text-transform: uppercase;
-      }
-
-      h1 {
-        margin: 4px 0 12px;
-        font-size: 20px;
-        text-align: center;
-      }
-
-      p.desc {
-        margin: 0 0 18px;
-        font-size: 14px;
-        color: var(--muted);
-        text-align: center;
-      }
-
-      label {
-        display: block;
-        font-size: 12px;
-        color: var(--muted);
-        margin-bottom: 6px;
-      }
-
-      .field {
-        position: relative;
-        margin-bottom: 14px;
-      }
-
-      input[type="password"],
-      input[type="text"] {
-        width: 100%;
+        max-width: 380px;
         box-sizing: border-box;
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        background: #05070b;
-        color: var(--text);
-        padding: 11px 40px 11px 11px;
+        border: 1px solid #333;
+      }
+      h1 {
+        margin: 0 0 10px;
+        font-size: 20px;
+        color: #6cff99;
+        text-align: center;
+      }
+      p {
         font-size: 14px;
-        outline: none;
+        margin: 8px 0;
+        text-align: center;
       }
-
-      input:focus {
-        border-color: var(--accent);
+      input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #444;
+        background: #151515;
+        color: #eee;
+        box-sizing: border-box;
+        margin-top: 8px;
       }
-
-      .eye-btn {
-        position: absolute;
-        right: 10px;
-        top: 0;
-        bottom: 0;
-        display: flex;
-        align-items: center;
-        font-size: 11px;
-        color: var(--muted);
-        cursor: pointer;
-        user-select: none;
-      }
-
       button {
         width: 100%;
+        margin-top: 14px;
+        padding: 10px;
         border-radius: 999px;
-        padding: 12px 14px;
-        border: 1px solid var(--accent);
-        background: var(--accent);
-        color: #020304;
+        border: none;
+        background: #6cff99;
         font-weight: 600;
-        font-size: 14px;
         cursor: pointer;
-        margin-top: 6px;
       }
-
       button:disabled {
         opacity: 0.6;
         cursor: default;
       }
-
       .status {
-        margin-top: 12px;
+        margin-top: 10px;
         font-size: 13px;
         text-align: center;
       }
-
       .status.error {
-        color: var(--danger);
+        color: #ff6b6b;
       }
-
-      .status.ok {
-        color: var(--accent);
-      }
-
-      .hint {
-        margin-top: 10px;
-        font-size: 12px;
-        color: var(--muted);
-        text-align: center;
+      .status.success {
+        color: #6cff99;
       }
     </style>
-    <!-- Supabase JS (CDN) -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
     <div class="card">
-      <div class="brand">KOVA</div>
       <h1>Reset Password</h1>
-      <p class="desc">
-        Enter a new password for your Kova account. After you save it, go back
-        to the app and sign in with your new password.
-      </p>
+      <p id="info">Setting up your reset session...</p>
 
-      <form id="reset-form">
-        <div class="field">
-          <label for="password">New password</label>
-          <input
-            id="password"
-            type="password"
-            autocomplete="new-password"
-            required
-          />
-          <div class="eye-btn" data-target="password">show</div>
-        </div>
-
-        <div class="field">
-          <label for="password2">Confirm new password</label>
-          <input
-            id="password2"
-            type="password"
-            autocomplete="new-password"
-            required
-          />
-          <div class="eye-btn" data-target="password2">show</div>
-        </div>
-
-        <button type="submit" id="submit-btn">Save new password</button>
+      <form id="reset-form" style="display:none;">
+        <p>Enter a new password for your Kova account.</p>
+        <input
+          id="password"
+          type="password"
+          placeholder="New password"
+          autocomplete="new-password"
+          required
+        />
+        <button id="submit-btn" type="submit">Update Password</button>
       </form>
 
       <div id="status" class="status"></div>
-      <div class="hint">
-        If this link is expired or invalid, go back to the app and request a new
-        reset email.
-      </div>
     </div>
 
+    <!-- Supabase JS v2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-      const { createClient } = supabase;
+      // TODO: set these to YOUR real Supabase project values
+      const SUPABASE_URL = "https://YOUR-PROJECT-ID.supabase.co";
+      const SUPABASE_ANON_KEY = "YOUR_ANON_PUBLIC_KEY";
 
-      const SUPABASE_URL = "https://ltsdfguznhbmacqqrjcv.supabase.co";
-      const SUPABASE_ANON_KEY =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0c2RmZ3V6bmhibWFjcXFyamN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5NTc1NzgsImV4cCI6MjA4MzUzMzU3OH0.N1IDQam92KLfLFUMCLDtGQnZy8PG94eu0bDfe4-b1hk";
+      const supabaseClient = supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
 
-      const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-      const statusEl = document.getElementById("status");
+      const infoEl = document.getElementById("info");
       const formEl = document.getElementById("reset-form");
-      const btnEl = document.getElementById("submit-btn");
+      const statusEl = document.getElementById("status");
+      const passwordInput = document.getElementById("password");
+      const submitBtn = document.getElementById("submit-btn");
 
-      function setStatus(msg, kind) {
-        statusEl.textContent = msg || "";
-        statusEl.className = "status " + (kind || "");
+      async function init() {
+        infoEl.textContent = "Checking reset link...";
+
+        // This should pick up the magic link session from the URL hash
+        const { data, error } = await supabaseClient.auth.getSession();
+
+        if (error || !data.session) {
+          infoEl.textContent = "This reset link is invalid or has expired.";
+          return;
+        }
+
+        // We have a valid session from the reset link
+        infoEl.textContent = "Reset link verified. Set your new password below.";
+        formEl.style.display = "block";
       }
 
-      // toggle show/hide
-      document.querySelectorAll(".eye-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const id = btn.getAttribute("data-target");
-          const input = document.getElementById(id);
-          if (!input) return;
-          if (input.type === "password") {
-            input.type = "text";
-            btn.textContent = "hide";
-          } else {
-            input.type = "password";
-            btn.textContent = "show";
-          }
-        });
-      });
+      init();
 
       formEl.addEventListener("submit", async (e) => {
         e.preventDefault();
-        setStatus("", "");
+        statusEl.textContent = "";
+        statusEl.className = "status";
 
-        const pw1 = (document.getElementById("password").value || "").trim();
-        const pw2 = (document.getElementById("password2").value || "").trim();
-
-        if (!pw1 || !pw2) {
-          setStatus("Enter your new password in both boxes.", "error");
-          return;
-        }
-        if (pw1 !== pw2) {
-          setStatus("Passwords do not match.", "error");
+        const newPassword = passwordInput.value.trim();
+        if (!newPassword) {
+          statusEl.textContent = "Please enter a new password.";
+          statusEl.classList.add("error");
           return;
         }
 
-        // read tokens from hash fragment
-        const hash = window.location.hash.startsWith("#")
-          ? window.location.hash.substring(1)
-          : window.location.hash;
-        const params = new URLSearchParams(hash);
-        const access_token = params.get("access_token");
-        const refresh_token = params.get("refresh_token");
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Updating...";
 
-        if (!access_token || !refresh_token) {
-          setStatus(
-            "This reset link is invalid or expired. Request a new reset email from the app.",
-            "error"
-          );
+        const { error } = await supabaseClient.auth.updateUser({
+          password: newPassword,
+        });
+
+        if (error) {
+          statusEl.textContent =
+            error.message || "Could not update password. Try again.";
+          statusEl.classList.add("error");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Update Password";
           return;
         }
 
-        btnEl.disabled = true;
-        btnEl.textContent = "Saving...";
-        try {
-          // set Supabase session from the recovery link
-          const { error: sessionError } = await client.auth.setSession({
-            access_token,
-            refresh_token,
-          });
-          if (sessionError) {
-            console.error(sessionError);
-            setStatus(
-              "Could not verify this reset link. Try requesting a new one.",
-              "error"
-            );
-            return;
-          }
-
-          const { error: updateError } = await client.auth.updateUser({
-            password: pw1,
-          });
-
-          if (updateError) {
-            console.error(updateError);
-            setStatus(updateError.message || "Could not update password.", "error");
-            return;
-          }
-
-          setStatus(
-            "Password updated. You can close this tab and sign in with your new password in Kova.",
-            "ok"
-          );
-        } catch (err) {
-          console.error(err);
-          setStatus("Unexpected error while changing password.", "error");
-        } finally {
-          btnEl.disabled = false;
-          btnEl.textContent = "Save new password";
-        }
+        statusEl.textContent =
+          "Password updated. You can now close this page and sign in with your new password.";
+        statusEl.classList.add("success");
+        infoEl.textContent = "Password updated successfully.";
+        passwordInput.value = "";
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Done";
       });
     </script>
   </body>

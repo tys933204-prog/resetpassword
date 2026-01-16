@@ -95,9 +95,9 @@
     <!-- Supabase JS v2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-      // TODO: set these to YOUR real Supabase project values
-      const SUPABASE_URL = "https://YOUR-PROJECT-ID.supabase.co";
-      const SUPABASE_ANON_KEY = "YOUR_ANON_PUBLIC_KEY";
+      const SUPABASE_URL = "https://ltsdfguznhbmacqqrjcv.supabase.co";
+      const SUPABASE_ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0c2RmZ3V6bmhibWFjcXFyamN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5NTc1NzgsImV4cCI6MjA4MzUzMzU3OH0.N1IDQam92KLfLFUMCLDtGQnZy8PG94eu0bDfe4-b1hk";
 
       const supabaseClient = supabase.createClient(
         SUPABASE_URL,
@@ -113,7 +113,7 @@
       async function init() {
         infoEl.textContent = "Checking reset link...";
 
-        // This should pick up the magic link session from the URL hash
+        // Use the magic link session from the URL hash
         const { data, error } = await supabaseClient.auth.getSession();
 
         if (error || !data.session) {
@@ -121,8 +121,8 @@
           return;
         }
 
-        // We have a valid session from the reset link
-        infoEl.textContent = "Reset link verified. Set your new password below.";
+        infoEl.textContent =
+          "Reset link verified. Set your new password below.";
         formEl.style.display = "block";
       }
 
